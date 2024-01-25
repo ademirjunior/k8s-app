@@ -1,0 +1,82 @@
+Instalar minikube
+https://minikube.sigs.k8s.io/docs/start/
+
+Instalar kubectl
+https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/#install-kubectl-binary-with-curl-on-windows
+
+Colocar os instaladores em uma pasta de sua preferencia
+
+Ir nas variáveis de ambiente
+Nas variaveis do usuário, editar a Path
+Adicionar o caminho de onde estão os instaladores
+
+Instalar o minikube
+ao instalar o kubectl mostra uma mensagem de erro no cmd
+
+Comandos minikube
+minikube version
+minikube start --driver=docker
+minikube status
+
+kubectl cluster-info
+kubectl get node
+
+Allowing Kubernetes to have access to local docker image and Building our image (fazer no cmd aberto na raiz do projeto)
+minikube docker-env
+
+IF get thhis error - W0125 09:51:28.239946   39036 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found:
+Use this command
+docker context use default
+
+copiar a última linha 
+REM @FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
+
+Construir a imagem Docker
+docker build -t k8s-app-img:1.0.0 .
+
+Create a deployment
+kubectl create deployment k8s-app-deployment --image=k8s-app-img:1.0.0 --port=8080
+
+Check a deployment
+kubectl get deployment
+
+Describe the deployment
+kubectl describe deployment k8s-app-deployment
+
+Get the pods and check its status
+kubectl get pods
+
+Get the logs for the pod
+kubectl logs <podname>
+
+Command to expose a service on a deployment
+kubectl expose deployment k8s-app-deployment --type=NodePort
+
+Get all services
+kubectl get service
+
+GET URL of the service
+minikube service nameoftheservice --url
+
+minikube dashboard
+
+Steps to access the Application
+---------------------------------
+1. kubectl get service
+2. minikube ssh (do inside of the folder)
+4. curl url (url do dashboard e porta exibida no comando anterior)
+
+------------------
+kubectl delete --all pods --namespace=foo
+kubectl delete --all deployments --namespace=foo
+kubectl delete --all namespaces
+
+Delete a service
+kubectl delete svc k8s-app-deployment
+
+==================
+List all images
+docker images
+
+Build Docker Image
+docker build -t k8s-app-img:1.0.0 .
